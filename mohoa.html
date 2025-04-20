@@ -4,21 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bài Thơ</title>
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
- 
- <style>
-    @font-face {
-      font-family: 'Declaration';
-      src: url('FZ SG-USDeclaration.ttf') format('truetype');
-    }
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Unicase:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
+  <style>
     body {
       margin: 0;
       padding: 0;
       background-color: black;
       color: white;
-      font-family: 'Declaration', sans-serif;
+      font-family: 'Cormorant Unicase', serif;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -26,18 +23,37 @@
       text-align: center;
       padding: 5vw;
     }
-  
+
+    .random-char {
+  transition: color 1s ease-in-out;
+     }
+
+
     .poem {
       max-width: 800px;
-      line-height: 1.8;
-      font-size: clamp(1rem, 2vw, 1.5rem);
+      padding: 5vw;
+      line-height: 1.6;
+      font-size: clamp(1rem, 2vw, 1.4rem);
       white-space: pre-wrap;
     }
-  
-    .highlight {
-      color: white;
-      transition: color 1.5s ease-in-out;
+
+    .highlight-anh, .highlight-em {
+      transition: color 3s ease-in-out;
     }
+
+    .highlight-anh, .highlight-em {
+  transition: color 3s ease-in-out, text-shadow 0.5s ease-in-out;
+}
+
+.highlight-anh:hover, .highlight-em:hover {
+  color: #ffffff;
+  text-shadow:
+    0 0 5px #ffffff,
+    0 0 10px #ffccff,
+    0 0 15px #ff99ff,
+    0 0 20px #ff66ff;
+}
+
 
     #homeBtn {
       position: fixed;
@@ -51,81 +67,102 @@
       font-size: 16px;
       text-decoration: none;
       font-family: 'Cactus Classical Serif', serif;
-      z-index: 10;
+      z-index: 9999;
       transition: background 0.3s;
     }
-  
+
     #homeBtn:hover {
       background: rgba(255, 255, 255, 0.3);
     }
+
   </style>
-  
 </head>
 <body>
-  <!-- <a href="./" id="homeBtn">⌂ </a> -->
+
   <a href="./index.html" id="homeBtn"><i class="fas fa-home"></i></a>
 
-  <div class="poem" id="poem">
-    Em đi tìm anh trong miền nhớ miền quên  
-    Vượt ngày hoang vu và những đêm không ngủ  
-    Hỏi thần thoại loài người thuở ong bướm cũ  
-    Có thấy một đôi mắt ngàn sao  
-    Hay thất thần giữa những thảo nguyên   
-    Gọi mặt trời bên kia bờ cát trắng ?  
-    
-    Đại dương mong manh  1234
-    Và em vô tận   
-    Trầm tích mình ngủ kỹ tận hang sâu  
-    
-    Em đi tìm anh ở quá khứ vị lai  
-    Em đi tìm ở chốn sai và chốn đúng  
-    Ở ranh giới người địa đường dương thể  
-    Hỏi những người lưu lạc chốn xa xăm   
-    
-    Em đi tìm   
-    và tìm đến trăm năm  
-    Đã lật qua từng trang sách cổ  
-    Đã hỏi mai sau  
-    Đã nhiều lần đổ máu,  
-    
-    Nay xin quay về bến bờ yên lặng   
-    Dưới chân người   
-    Những khổ sở cuộc đời tan biến hết  
-    Một hạt bụi nguyên sơ
-  </div>
+  <div class="poem" id="poem"></div>
 
   <script>
+    // Nội dung bài thơ chia thành các dòng
+    let poemLines = [
+      "Em đi tìm anh trong miền nhớ miền quên",
+      "Vượt ngày hoang vu và những đêm không ngủ",
+      "Hỏi thần thoại loài người thuở ong bướm cũ",
+      "Có thấy một đôi mắt ngàn sao",
+      "",
+      "Hay thất thần giữa những thảo nguyên",
+      "Gọi mặt trời bên kia bờ cát trắng ?",
+      "Đại dương mong manh",
+      "Và em vô tận",
+      "Trầm tích mình ngủ kỹ tận hang sâu",
+      "",
+      "Em đi tìm anh ở quá khứ vị lai",
+      "Em đi tìm ở chốn sai và chốn đúng",
+      "Ở ranh giới người địa đường dương thể",
+      "Hỏi những người lưu lạc chốn xa xăm",
+      "",
+      "Em đi tìm và tìm đến trăm năm",
+      "Đã lật qua từng trang sách cổ",
+      "Đã hỏi mai sau",
+      "Đã nhiều lần đổ máu,",
+      "",
+      "Nay xin quay về bến bờ yên lặng",
+      "Dưới chân người",
+      "Những khổ sở cuộc đời tan biến hết",
+      "Một hạt bụi nguyên sơ"
+    ];
+
+    // Hiển thị bài thơ trên trang
     const poemEl = document.getElementById('poem');
-    const chars = poemEl.textContent.split('');
-    poemEl.innerHTML = '';
-
-    chars.forEach(char => {
-      const span = document.createElement('span');
-      span.textContent = char;
-      span.classList.add('highlight');
-      poemEl.appendChild(span);
-    });
-
-    function animateRandomChars() {
-      const spans = document.querySelectorAll('.highlight');
-      const count = 10;
-      for (let i = 0; i < count; i++) {
-        const index = Math.floor(Math.random() * spans.length);
-        const charSpan = spans[index];
-
-        charSpan.style.color = '#8B0000'; // đỏ thẫm
-
-        setTimeout(() => {
-          charSpan.style.color = 'black';
-          setTimeout(() => {
-            charSpan.style.color = 'white';
-          }, 1000);
-        }, 1000);
-      }
+    poemEl.innerHTML = poemLines.map(line => {
+  return line.split(' ').map(word => {
+    let cleanWord = word.replace(/[^a-zA-ZÀ-ỹà-ỹ0-9\-]/g, '');
+    if (cleanWord.toLowerCase() === 'anh') {
+      return `<span class="highlight-anh">${word}</span>`;
+    } else if (cleanWord.toLowerCase() === 'em') {
+      return `<span class="highlight-em">${word}</span>`;
+    } else {
+      return `<span class="random-char">${word}</span>`;
     }
+  }).join(' ') + '<br>';
+}).join('');
 
-    setInterval(animateRandomChars, 300);
+
+    // Thêm hiệu ứng đổi màu ngẫu nhiên cho các chữ cái
+    function animateRandomChars() {
+  const allSpans = Array.from(document.querySelectorAll('.random-char'));
+  const numberToAnimate = Math.floor(allSpans.length * 0.2); // khoảng 20% số chữ
+  const spansToAnimate = [];
+
+  // Chọn ngẫu nhiên một số chữ để hiệu ứng
+  while (spansToAnimate.length < numberToAnimate) {
+    const randIndex = Math.floor(Math.random() * allSpans.length);
+    const chosen = allSpans[randIndex];
+    if (!spansToAnimate.includes(chosen)) {
+      spansToAnimate.push(chosen);
+    }
+  }
+
+  const colors = ['white', '#8B0000', 'black'];
+
+  spansToAnimate.forEach(span => {
+    let currentColorIndex = Math.floor(Math.random() * colors.length);
+    span.style.transition = 'color 2s ease-in-out';
+
+    setInterval(() => {
+      span.style.color = colors[currentColorIndex];
+      currentColorIndex = (currentColorIndex + 1) % colors.length;
+    }, Math.random() * 3000 + 1000); // ngẫu nhiên từ 1–4s
+  });
+}
+
+
+
+    // Kích hoạt hiệu ứng random color cho các chữ trong bài thơ
+    animateRandomChars();
+
   </script>
-  
+
 </body>
 </html>
