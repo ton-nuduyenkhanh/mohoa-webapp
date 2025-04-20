@@ -21,6 +21,8 @@
   font-family: 'Cactus Classical Serif', serif;
   z-index: 9999; /* Đảm bảo nút nằm trên cùng */
   transition: background 0.3s;
+  overflow-x: hidden;   /* vẫn chặn cuộn ngang */
+  overflow-y: auto;     /* cho phép cuộn dọc */
 }
 
 #homeBtn:hover {
@@ -33,7 +35,7 @@
     body {
       margin: 0;
       padding: 0;
-      height: 100%;
+      height: auto;
       background: black;
       overflow-x: hidden; /* prevents horizontal scrolling */
       overflow-y: auto; /* allows vertical scrolling */
@@ -129,11 +131,13 @@ let fontSize;
 let lineHeight;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let totalHeight = poemLines.length * lineHeight;
+  let canvasHeight = max(windowHeight, totalHeight + 200); // cộng thêm padding
+
+  createCanvas(windowWidth, canvasHeight);
   textFont('Cactus Classical Serif');
   textAlign(CENTER, CENTER);
 
-  // Tính size chữ phù hợp màn hình
   fontSize = min(windowWidth, windowHeight) * 0.025;
   textSize(fontSize);
   lineHeight = fontSize * 1.4;
@@ -141,8 +145,7 @@ function setup() {
   frameCount = 0;
   particles = [];
 
-  let totalHeight = poemLines.length * lineHeight;
-  let startY = (height - totalHeight) / 2;
+  let startY = (canvasHeight - totalHeight) / 2;
 
   for (let i = 0; i < poemLines.length; i++) {
     let line = poemLines[i];
