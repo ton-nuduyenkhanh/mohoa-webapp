@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>bay lên</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+ 
+<style>
+  #homeBtn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-decoration: none;
+    font-family: 'Cactus Classical Serif', serif;
+    z-index: 10;
+    transition: background 0.3s;
+  }
+
+  #homeBtn:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+</style>
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+      font-family: 'Cactus Classical Serif', serif;
+    }
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    #replayBtn {
+      position: absolute;
+      bottom: 30px;
+      left: 90%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid white;
+      padding: 8px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 1;
+      font-family: 'Cactus Classical Serif', serif;
+      transition: background 0.3s;
+    }
+    #replayBtn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cactus+Classical+Serif&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+</head>
+<body>
+  <a href="./index.html" id="homeBtn"><i class="fas fa-home"></i></a>
+
+
+<button id="replayBtn" onclick="restartSketch()">⟲</button>
+
+<script>
+let poemLines = [
+  "Có một giây phút",
+  "Đó là bây giờ",
+  "Em dừng lại",
+  "",
+  "Anh có bao giờ tự hỏi điều gì đã tạo nên hai chúng ta",
+  "Những mảnh vụn sao trời",
+  "Hạt vật chất và",
+  "Ngày đêm đăm chiêu trong khổ sở",
+  "",
+  "Chúng mình đã bơi qua những dòng sông ý tưởng để nắm tay nhau và lên bờ",
+  "Em là con người",
+  "Anh là con người",
+  "",
+  "Cái nắm tay đó hoà nhịp anh vào em để em lấy một chút từ anh và lớn",
+  "Kịp đủ để lớn",
+  "Ngay trước lúc anh xuyên qua em và chúng mình lại trần mình vào dòng sông ý tưởng để lại bước lên bờ và làm một con người mới",
+  "",
+  "Đôi khi",
+  "",
+  "Em tự hỏi không biết em sẽ là gì nếu không phải một nhận thức sẵn có về bản thân",
+  "Và anh thực sự là gì nếu không phải một nhận thức sẵn có trong đầu em",
+  "Em đã tạo nên anh như Chúa",
+  "Và anh cũng tạo nên em như Chúa",
+  "",
+  "Chúng ta đứng đối mặt nhau",
+  "Thiên hà trải ra trước em chỉ là ánh mắt anh",
+  "Em chết, anh ơi",
+  "Em chết"
+];
+
+let particles = [];
+let finalMessage = "bay lên những suy nghĩ tự do";
+
+let FLOAT_TIME = 60 * 10;
+let EXPLODE_TIME = FLOAT_TIME + 60 * 5;
+let FADE_TIME = EXPLODE_TIME + 60 * 10;
+let FINAL_TIME = FADE_TIME + 60 * 3;
+
+let fontSize;
+let lineHeight;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  textFont('Cactus Classical Serif');
+  textAlign(CENTER, CENTER);
+
+  // Tính size chữ phù hợp màn hình
+  fontSize = min(windowWidth, windowHeight) * 0.025;
+  textSize(fontSize);
+  lineHeight = fontSize * 1.4;
+
+  frameCount = 0;
+  particles = [];
+
+  let totalHeight = poemLines.length * lineHeight;
+  let startY = (height - totalHeight) / 2;
+
+  for (let i = 0; i < poemLines.length; i++) {
+    let line = poemLines[i];
+    let y = startY + i * lineHeight;
+
+    let chars = line.split("");
+    let totalWidth = textWidth(line);
+    let startX = (width - totalWidth) / 2;
+    let offsetX = 0;
+
+    for (let j = 0; j < chars.length; j++) {
+      let char = chars[j];
+      let charWidth = textWidth(char);
+      particles.push(new Letter(char, startX + offsetX, y));
+      offsetX += charWidth;
+    }
+  }
+}
+
+function draw() {
+  background(0);
+  let fc = frameCount;
+
+  for (let p of particles) {
+    if (fc < FLOAT_TIME) {
+      p.floatGently();
+    }
+
+    if (fc >= FLOAT_TIME && !p.exploded && fc > p.explodeStart) {
+      p.explode();
+    }
+
+    if (fc > EXPLODE_TIME && fc <= FADE_TIME) {
+      p.fadeOut();
+    }
+
+    p.update();
+    p.display();
+  }
+
+  if (fc > FADE_TIME && fc <= FINAL_TIME) {
+    fill(255);
+    textSize(fontSize * 1.4);
+    text(finalMessage, width / 2, height / 2);
+  }
+}
+
+class Letter {
+  constructor(char, x, y) {
+    this.char = char;
+    this.origin = createVector(x, y);
+    this.pos = createVector(x, y);
+    this.vel = createVector(0, 0);
+    this.angle = 0;
+    this.rotationSpeed = random(-0.02, 0.02);
+    this.exploded = false;
+    this.alpha = 255;
+    this.explodeStart = FLOAT_TIME + int(random(0, 60 * 5));
+  }
+
+  floatGently() {
+    let t = frameCount * 0.01;
+    this.pos.x += sin(t + this.origin.y * 0.01) * 0.2;
+    this.pos.y += cos(t + this.origin.x * 0.01) * 0.1;
+  }
+
+  explode() {
+    this.vel = p5.Vector.random2D().mult(random(0.3, 1));
+    this.exploded = true;
+  }
+
+  fadeOut() {
+    this.alpha -= 255 / (60 * 10);
+    this.alpha = max(0, this.alpha);
+  }
+
+  update() {
+    if (this.exploded) {
+      this.pos.add(this.vel);
+      this.angle += this.rotationSpeed;
+      this.floatGently();
+    }
+  }
+
+  display() {
+    push();
+    translate(this.pos.x, this.pos.y);
+    rotate(this.angle);
+    fill(255, this.alpha);
+    noStroke();
+    text(this.char, 0, 0);
+    pop();
+  }
+}
+
+function restartSketch() {
+  frameCount = 0;
+  setup();
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  restartSketch();
+}
+</script>
+</body>
+</html>
