@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mơ hoa</title>
   <style>
     html, body {
@@ -16,6 +17,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      -webkit-tap-highlight-color: transparent;
     }
 
     #overlay {
@@ -25,29 +27,38 @@
       transform: translate(-50%, -50%);
       text-align: center;
       z-index: 2;
+      width: 90vw;
     }
 
-    #title {
-      font-family: 'Ballet', cursive;
-      font-size: calc(8vw + 1vh);
-      pointer-events: none;
-      position: relative;
-      text-shadow: 0 0 10px rgba(255,255,255,0.3);
-      transition: transform 0.3s ease;
-    }
+  #title {
+    font-family: 'Ballet', cursive;
+    font-size: clamp(48px, 12vw, 96px); /* Tăng kích cỡ tiêu đề */
+    pointer-events: none;
+    position: relative;
+    text-shadow: 0 0 10px rgba(255,255,255,0.4);
+    transition: transform 0.3s ease;
+    line-height: 1.2;
+  }
 
-    #lines {
-      margin-top: 3vh;
-      font-size: calc(2vw + 1vh);
-    }
+  #lines {
+    margin-top: 5vh;
+    font-size: clamp(16px, 4.5vw, 24px); /* Giữ size nhỏ hơn tiêu đề */
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+  }
 
     .line {
       opacity: 1;
       transition: color 0.3s ease, transform 0.3s ease;
       cursor: pointer;
+      padding: 1vh 0;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
-    .line:hover {
+    .line:hover,
+    .line:active {
       color: white;
       transform: scale(1.05);
       text-shadow: 0 0 5px white;
@@ -72,6 +83,16 @@
       100% {
         transform: translateY(110vh) rotate(360deg);
         opacity: 0;
+      }
+    }
+
+    @media (min-width: 768px) {
+      #title {
+        font-size: clamp(36px, 6vw, 72px);
+      }
+
+      #lines {
+        font-size: clamp(18px, 3vw, 28px);
       }
     }
   </style>
@@ -105,7 +126,7 @@
 
     floatTitle();
 
-    // Click handler for line redirection
+    // Redirect on tap/click
     document.querySelectorAll('.line').forEach(line => {
       line.classList.add("show");
       line.addEventListener('click', (e) => {
