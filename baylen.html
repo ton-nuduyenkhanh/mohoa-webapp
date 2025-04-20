@@ -16,7 +16,7 @@
   border: 1px solid white;
   padding: 8px 16px;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 3vw;
   text-decoration: none;
   font-family: 'Cactus Classical Serif', serif;
   z-index: 9999; /* Đảm bảo nút nằm trên cùng */
@@ -96,18 +96,24 @@ let poemLines = [
   "Hạt vật chất và",
   "Ngày đêm đăm chiêu trong khổ sở",
   "",
-  "Chúng mình đã bơi qua những dòng sông ý tưởng để nắm tay nhau và lên bờ",
+  "Chúng mình đã bơi qua những dòng sông ý tưởng",
+  "để nắm tay nhau và lên bờ",
   "Em là con người",
   "Anh là con người",
   "",
-  "Cái nắm tay đó hoà nhịp anh vào em để em lấy một chút từ anh và lớn",
+  "Cái nắm tay đó hoà nhịp anh vào em", 
+  "để em lấy một chút từ anh và lớn",
   "Kịp đủ để lớn",
-  "Ngay trước lúc anh xuyên qua em và chúng mình lại trần mình vào dòng sông ý tưởng để lại bước lên bờ và làm một con người mới",
+  "Ngay trước lúc anh xuyên qua em và",
+  "chúng mình lại trần mình vào dòng sông ý tưởng để",
+  "lại bước lên bờ và làm một con người mới",
   "",
   "Đôi khi",
   "",
-  "Em tự hỏi không biết em sẽ là gì nếu không phải một nhận thức sẵn có về bản thân",
-  "Và anh thực sự là gì nếu không phải một nhận thức sẵn có trong đầu em",
+  "Em tự hỏi không biết em sẽ là gì",
+  "nếu không phải một nhận thức sẵn có về bản thân",
+  "Và anh thực sự là gì",
+  "nếu không phải một nhận thức sẵn có trong đầu em",
   "Em đã tạo nên anh như Chúa",
   "Và anh cũng tạo nên em như Chúa",
   "",
@@ -131,16 +137,17 @@ let fontSize;
 let lineHeight;
 
 function setup() {
+  fontSize = min(windowWidth, windowHeight) * 0.025;
+  lineHeight = fontSize * 1.4;
+
+  textSize(fontSize); // cần đặt trước khi dùng textWidth()
+
   let totalHeight = poemLines.length * lineHeight;
   let canvasHeight = max(windowHeight, totalHeight + 200); // cộng thêm padding
 
   createCanvas(windowWidth, canvasHeight);
   textFont('Cactus Classical Serif');
   textAlign(CENTER, CENTER);
-
-  fontSize = min(windowWidth, windowHeight) * 0.025;
-  textSize(fontSize);
-  lineHeight = fontSize * 1.4;
 
   frameCount = 0;
   particles = [];
@@ -164,6 +171,7 @@ function setup() {
     }
   }
 }
+
 
 function draw() {
   background(0);
