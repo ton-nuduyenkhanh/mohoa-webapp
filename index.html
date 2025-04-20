@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mơ hoa</title>
   <style>
     html, body {
@@ -16,6 +17,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      touch-action: manipulation;
     }
 
     canvas {
@@ -32,24 +34,26 @@
       transform: translate(-50%, -50%);
       text-align: center;
       z-index: 2;
+      padding: 0 5vw;
     }
 
     #title {
       font-family: 'Ballet', cursive;
-      font-size: calc(8vw + 1vh);
+      font-size: clamp(32px, 6vw, 64px);
       pointer-events: none;
       position: relative;
     }
 
     #lines {
       margin-top: 3vh;
-      font-size: calc(2vw + 1vh);
+      font-size: clamp(18px, 4vw, 28px);
     }
 
     .line {
       opacity: 0;
       transition: opacity 0.6s ease;
       cursor: pointer;
+      margin: 1vh 0;
     }
 
     .line.show {
@@ -99,12 +103,15 @@
         const line = lines[currentLine];
         line.classList.add("show");
 
-        // Add click to redirect once it's shown
-        line.addEventListener("click", (e) => {
-          e.stopPropagation(); // prevent triggering the global click
+        const handleTap = (e) => {
+          if (!line.classList.contains("show")) return;
+          e.stopPropagation();
           const url = line.getAttribute("data-link");
           if (url) window.location.href = url;
-        });
+        };
+
+        line.removeEventListener("click", handleTap);
+        line.addEventListener("click", handleTap);
 
         currentLine++;
       }
