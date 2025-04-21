@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bấy giờ là một tối tháng sáu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Unicase:wght@300;400;600&family=Nunito+Sans:wght@300;500&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      background-color: #0e0e0e;
+      color: #f6f1eb;
+      font-family: 'Cormorant Unicase', serif;
+      height: 100vh;
+      overflow: hidden;
+      cursor: grab;
+    }
+
+    .line {
+      position: absolute;
+      padding: 8px 12px;
+      font-size: 2.5vmin;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+      user-select: none;
+      cursor: grab;
+    }
+
+    .dragging {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+      cursor: grabbing;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="line" style="top: 50px; left: 50px;">Bấy giờ là một tối tháng sáu</div>
+  <div class="line" style="top: 120px; left: 80px;">Em vỡ tan ra, nắm tay anh chạy băng qua thời gian, trầm mình xuống biển</div>
+  <div class="line" style="top: 200px; left: 60px;">Mặt trăng ướt đẫm cơn mưa sắp tới</div>
+  <div class="line" style="top: 280px; left: 100px;">Những vết cắt trên tay em bỏng rát</div>
+  <div class="line" style="top: 360px; left: 50px;">Mình hôn nhau</div>
+
+  <div class="line" style="top: 440px; left: 150px;">Sự sống trong một giây phút đó mãi mãi dính chặt vào em như một hình xăm</div>
+  <div class="line" style="top: 520px; left: 90px;">Đã lành</div>
+  <div class="line" style="top: 600px; left: 120px;">Nhưng không hoàn hảo</div>
+
+  <div class="line" style="top: 680px; left: 60px;">Những ngôi sao rơi xuống trong đôi mắt anh nguội lạnh</div>
+  <div class="line" style="top: 760px; left: 130px;">Tắt sáng</div>
+  <div class="line" style="top: 840px; left: 70px;">Em chưa biết yêu</div>
+  <div class="line" style="top: 920px; left: 110px;">Nhưng cũng đủ khôn ngoan để ngừng nói</div>
+
+  <div class="line" style="top: 1000px; left: 90px;">Em ước gì mình đã để thời gian trôi chậm hơn trong im lặng anh à</div>
+  <div class="line" style="top: 1080px; left: 150px;">Ta trong nhau phải giết, huỷ diệt, cháy bừng</div>
+  <div class="line" style="top: 1160px; left: 80px;">Và vỡ tan</div>
+
+  <script>
+    let currentLine = null;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    document.querySelectorAll('.line').forEach(line => {
+      line.addEventListener('mousedown', e => {
+        currentLine = line;
+        offsetX = e.clientX - line.offsetLeft;
+        offsetY = e.clientY - line.offsetTop;
+        line.classList.add('dragging');
+      });
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (currentLine) {
+        currentLine.style.left = (e.clientX - offsetX) + 'px';
+        currentLine.style.top = (e.clientY - offsetY) + 'px';
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (currentLine) {
+        currentLine.classList.remove('dragging');
+        currentLine = null;
+      }
+    });
+  </script>
+</body>
+</html>
