@@ -4,87 +4,169 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bấy giờ là một tối tháng sáu</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Unicase:wght@300;400;600&family=Nunito+Sans:wght@300;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Thasadith&display=swap" rel="stylesheet" />
   <style>
+
+
+ #homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid white;
+  padding: 8px 16px; /* Giữ padding để nút vừa phải */
+  border-radius: 8px;
+  font-size: 16px; /* Tăng chút font-size cho chữ */
+  text-decoration: none;
+  font-family: 'Cactus Classical Serif', serif;
+  z-index: 9999; /* Đảm bảo nút nằm trên cùng */
+  transition: background 0.3s;
+}
+
+#homeBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
     body {
       margin: 0;
-      background-color: #0e0e0e;
-      color: #f6f1eb;
-      font-family: 'Cormorant Unicase', serif;
-      height: 100vh;
-      overflow: hidden;
-      cursor: grab;
+      padding: 0;
+      height: auto;
+      background: black;
+      overflow-x: hidden;
+      overflow-y: auto;
+      font-family: 'Thasadith', sans-serif;
+      color: #FFE5B4;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
     }
 
     .line {
       position: absolute;
-      padding: 8px 12px;
-      font-size: 2.5vmin;
-      background-color: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
-      user-select: none;
-      cursor: grab;
+      font-size: 2.2vmin;
+      line-height: 3.5vmin;
+      max-width: 80%;
+      text-align: center;
+      padding: 10px 14px;
+      transition: all 0.5s ease;
+      opacity: 0.7;
+      cursor: pointer;
     }
 
-    .dragging {
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
-      cursor: grabbing;
+    .selected {
+      opacity: 1;
+      color: #FFE5B4;
+    }
+
+    .highlight {
+      text-shadow: 0 0 6px #ffffff, 0 0 12px #ffffff;
+      color: white;
+    }
+
+    #poemWrapper {
+      position: relative;
+      width: 100%;
+      height: 100vh;
     }
   </style>
 </head>
 <body>
 
-  <div class="line" style="top: 50px; left: 50px;">Bấy giờ là một tối tháng sáu</div>
-  <div class="line" style="top: 120px; left: 80px;">Em vỡ tan ra, nắm tay anh chạy băng qua thời gian, trầm mình xuống biển</div>
-  <div class="line" style="top: 200px; left: 60px;">Mặt trăng ướt đẫm cơn mưa sắp tới</div>
-  <div class="line" style="top: 280px; left: 100px;">Những vết cắt trên tay em bỏng rát</div>
-  <div class="line" style="top: 360px; left: 50px;">Mình hôn nhau</div>
-
-  <div class="line" style="top: 440px; left: 150px;">Sự sống trong một giây phút đó mãi mãi dính chặt vào em như một hình xăm</div>
-  <div class="line" style="top: 520px; left: 90px;">Đã lành</div>
-  <div class="line" style="top: 600px; left: 120px;">Nhưng không hoàn hảo</div>
-
-  <div class="line" style="top: 680px; left: 60px;">Những ngôi sao rơi xuống trong đôi mắt anh nguội lạnh</div>
-  <div class="line" style="top: 760px; left: 130px;">Tắt sáng</div>
-  <div class="line" style="top: 840px; left: 70px;">Em chưa biết yêu</div>
-  <div class="line" style="top: 920px; left: 110px;">Nhưng cũng đủ khôn ngoan để ngừng nói</div>
-
-  <div class="line" style="top: 1000px; left: 90px;">Em ước gì mình đã để thời gian trôi chậm hơn trong im lặng anh à</div>
-  <div class="line" style="top: 1080px; left: 150px;">Ta trong nhau phải giết, huỷ diệt, cháy bừng</div>
-  <div class="line" style="top: 1160px; left: 80px;">Và vỡ tan</div>
+  <a href="./index.html" id="homeBtn"><i class="fas fa-home"></i></a>
+  <div class="container" id="poemWrapper"></div>
 
   <script>
-    let currentLine = null;
-    let offsetX = 0;
-    let offsetY = 0;
+    const lines = [
+      "Bấy giờ là một tối tháng sáu",
+      "Em vỡ tan ra, nắm tay anh chạy băng qua thời gian, trầm mình xuống biển",
+      "Mặt trăng ướt đẫm cơn mưa sắp tới",
+      "Những vết cắt trên tay em bỏng rát",
+      "Mình hôn nhau",
+      "Sự sống trong một giây phút đó mãi mãi dính chặt vào em như một hình xăm",
+      "Đã lành",
+      "Nhưng không hoàn hảo",
+      "Những ngôi sao rơi xuống trong đôi mắt anh nguội lạnh",
+      "Tắt sáng",
+      "Em chưa biết yêu",
+      "Nhưng cũng đủ khôn ngoan để ngừng nói",
+      "Em ước gì mình đã để thời gian trôi chậm hơn trong im lặng anh à",
+      "Ta trong nhau phải giết, huỷ diệt, cháy bừng",
+      "Và vỡ tan"
+    ];
 
-    document.querySelectorAll('.line').forEach(line => {
-      line.addEventListener('mousedown', e => {
-        currentLine = line;
-        offsetX = e.clientX - line.offsetLeft;
-        offsetY = e.clientY - line.offsetTop;
-        line.classList.add('dragging');
-      });
-    });
+    const wrapper = document.getElementById('poemWrapper');
+    const clickedLines = [];
+    const originalPositions = [];
 
-    document.addEventListener('mousemove', e => {
-      if (currentLine) {
-        currentLine.style.left = (e.clientX - offsetX) + 'px';
-        currentLine.style.top = (e.clientY - offsetY) + 'px';
+    // Tạo lưới vị trí không trùng nhau
+    const rows = 6;
+    const cols = 4;
+    const gridSlots = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        gridSlots.push({
+          left: 5 + c * 22 + Math.random() * 5,  // thêm một chút lệch để tự nhiên
+          top: 10 + r * 14 + Math.random() * 4
+        });
       }
+    }
+
+    // Shuffle vị trí để ngẫu nhiên
+    for (let i = gridSlots.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [gridSlots[i], gridSlots[j]] = [gridSlots[j], gridSlots[i]];
+    }
+
+    lines.forEach((text, idx) => {
+      const div = document.createElement('div');
+      div.className = 'line';
+      div.dataset.order = idx + 1;
+      div.textContent = text;
+
+      const pos = gridSlots[idx];
+      div.style.left = `${pos.left}%`;
+      div.style.top = `${pos.top}vh`;
+
+      originalPositions[idx] = { left: div.style.left, top: div.style.top };
+      wrapper.appendChild(div);
     });
 
-    document.addEventListener('mouseup', () => {
-      if (currentLine) {
-        currentLine.classList.remove('dragging');
-        currentLine = null;
+    wrapper.addEventListener('click', e => {
+      if (!e.target.classList.contains('line')) return;
+      const line = e.target;
+      const order = parseInt(line.dataset.order);
+
+      const clickedIndex = clickedLines.indexOf(order);
+      if (clickedIndex !== -1) {
+        // Bỏ chọn
+        clickedLines.splice(clickedIndex, 1);
+        line.classList.remove('selected', 'highlight');
+        const original = originalPositions[order - 1];
+        line.style.left = original.left;
+        line.style.top = original.top;
+        line.style.transform = 'none';
+        return;
+      }
+
+      clickedLines.push(order);
+      line.classList.add('selected');
+
+      const index = clickedLines.length - 1;
+      line.style.left = '50%';
+      line.style.top = `${10 + index * 6}vh`;
+      line.style.transform = 'translateX(-50%)';
+
+      if (clickedLines[index] === index + 1) {
+        line.classList.add('highlight');
+      } else {
+        line.classList.remove('highlight');
       }
     });
   </script>
+
 </body>
 </html>
