@@ -153,6 +153,15 @@ function mousePressed() {
   }
 }
 
+function mouseDragged() {
+  for (let l of letters) {
+    if (l.contains(mouseX, mouseY)) {
+      l.isActive = true; // Sáng lên khi rê chuột qua
+    }
+  }
+}
+
+
 class Letter {
   constructor(char, x, y, w) {
     this.char = char;
