@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ngày mai của chúng ta</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Hina+Mincho&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow-x: hidden;
+      overflow-y: auto;
+      font-family: 'Hina Mincho', serif;
+    }
+
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    #homeBtn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      text-decoration: none;
+      font-family: 'Cactus Classical Serif', serif;
+      z-index: 9999;
+      transition: background 0.3s;
+    }
+
+    #homeBtn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+</head>
+<body>
+
+<a href="./index.html" id="homeBtn"><i class="fas fa-home"></i></a>
+
+<script>
+let poem = `Anh ơi,
+Ngày mai của chúng ta
+Em nhặt những ngôi sao rải rác trên những ngón tay anh
+Đùa với chúng
+Mình là điệu nhạc của nhau, anh nhỉ
+
+Em học cách âu yếm âu yếm
+Trong ánh đèn vàng vắng lặng
+Khi đang nhảy chân sáo trên con đường về nhà một mình ở hiện tại
+Anh ơi,
+Ngày mai của chúng ta
+Anh nhặt những hạt cát trên da em, mình bước lên từ mặt biển
+
+Ngày mai của chúng ta
+Ngày mai của chúng ta
+Ngày mai của em và anh
+
+Từ tương lai một tưởng lại
+Chỉ là sự ngẫu nhiên của dấu câu
+Em đứng trên một chỗ cao hơn nhìn về mình bây giờ 
+Có một chút hơi trống trải
+
+Ngày mai của em và anh
+Ngày mai của anh
+
+Vòng mặt trời êm dịu - chói chang - huy hoàng và vụt tắt
+Anh đứng trên một chỗ cao hơn nữa nhìn về anh khi ấy
+Hôm nay của chính anh,
+đừng vội,
+
+Em bảo này,
+đừng vội,
+
+Ngày mai sẽ là ngày mai của chúng ta.`;
+
+let letters = [];
+let fontSize = 16;
+let lineHeight = 28;
+let totalHeight = 0;
+
+function setup() {
+  textFont('Hina Mincho');
+  textSize(fontSize);
+  textAlign(LEFT, TOP);
+
+  let lines = poem.split("\n");
+  let y = 150; // Thụt xuống thêm
+
+  for (let line of lines) {
+    let lineWidth = textWidth(line);
+    let x = (windowWidth - lineWidth) / 2; // Căn giữa dòng
+
+    for (let char of line) {
+      let w = textWidth(char);
+      letters.push(new Letter(char, x, y, w));
+      x += w;
+    }
+    y += lineHeight;
+  }
+
+  totalHeight = y + 50;
+  createCanvas(windowWidth, totalHeight);
+}
+
+
+
+function draw() {
+  background(0);
+  for (let l of letters) {
+    l.display();
+  }
+}
+
+function mousePressed() {
+  for (let l of letters) {
+    if (l.contains(mouseX, mouseY)) {
+      l.toggle();
+    }
+  }
+}
+
+class Letter {
+  constructor(char, x, y, w) {
+    this.char = char;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.isActive = false;
+  }
+
+  contains(px, py) {
+    return px >= this.x && px <= this.x + this.w && py >= this.y && py <= this.y + fontSize;
+  }
+
+  toggle() {
+    this.isActive = !this.isActive;
+  }
+
+  display() {
+    if (this.isActive) {
+      fill(255, 255, 180);
+      textStyle(BOLD);
+      drawingContext.shadowBlur = 15;
+      drawingContext.shadowColor = color(255, 255, 180);
+    } else {
+      fill(255);
+      textStyle(NORMAL);
+      drawingContext.shadowBlur = 0;
+    }
+
+    text(this.char, this.x, this.y);
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, totalHeight);
+}
+</script>
+
+</body>
+</html>
