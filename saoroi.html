@@ -42,12 +42,34 @@
     #homeBtn:hover {
       background: rgba(255, 255, 255, 0.3);
     }
+
+    #restartBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  z-index: 9999;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#restartBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
 </head>
 <body>
 
 <a href="./index.html" id="homeBtn"><i class="fas fa-home"></i></a>
+<button id="restartBtn"><i class="fas fa-rotate-right"></i></button>
+
 
 <script>
 let poem = `Anh ơi,
@@ -167,6 +189,11 @@ class Letter {
 function windowResized() {
   resizeCanvas(windowWidth, totalHeight);
 }
+
+document.getElementById('restartBtn').addEventListener('click', () => {
+  letters.forEach(letter => letter.isActive = false);
+});
+
 </script>
 
 </body>
