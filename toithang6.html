@@ -57,6 +57,25 @@
       cursor: pointer;
     }
 
+    #restartBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  z-index: 9999;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#restartBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
     .selected {
       opacity: 1;
       color: #FFE5B4;
@@ -76,6 +95,7 @@
 </head>
 <body>
 
+  <button id="restartBtn"><i class="fas fa-random"></i></button>
   <a href="./index.html" id="homeBtn"><i class="fas fa-home"></i></a>
   <div class="container" id="poemWrapper"></div>
 
@@ -134,6 +154,28 @@
       originalPositions[idx] = { left: div.style.left, top: div.style.top };
       wrapper.appendChild(div);
     });
+
+    document.getElementById('restartBtn').addEventListener('click', () => {
+  clickedLines.length = 0;
+
+  const lines = document.querySelectorAll('.line');
+
+  // Shuffle lại vị trí
+  const newSlots = [...gridSlots];
+  for (let i = newSlots.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newSlots[i], newSlots[j]] = [newSlots[j], newSlots[i]];
+  }
+
+  lines.forEach((line, idx) => {
+    line.classList.remove('selected', 'highlight');
+    const pos = newSlots[idx];
+    line.style.left = `${pos.left}%`;
+    line.style.top = `${pos.top}vh`;
+    line.style.transform = 'none';
+  });
+});
+
 
     wrapper.addEventListener('click', e => {
       if (!e.target.classList.contains('line')) return;
