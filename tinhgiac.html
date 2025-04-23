@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tỉnh giấc</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      color: white;
+      font-family: 'Cactus Classical Serif', serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .highlight {
+      text-shadow: 0 0 6px #ffd6eb, 0 0 12px #ffd6eb;
+      color: rgb(173, 120, 162);
+    }
+
+    #overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 2;
+      width: 90vw;
+    }
+
+    #title {
+      font-family: 'Ballet', cursive;
+      font-size: clamp(80px, 12vw, 96px);
+      pointer-events: none;
+      position: relative;
+      text-shadow: 0 0 10px rgba(255,255,255,0.4);
+      transition: transform 0.3s ease;
+      line-height: 1.2;
+    }
+
+    #lines {
+      margin-top: 5vh;
+      font-size: clamp(16px, 4.5vw, 24px);
+      display: flex;
+      flex-direction: column;
+      gap: 2vh;
+    }
+
+    .line {
+      opacity: 0;
+      transition: opacity 1s ease;
+      padding: 1vh 0;
+      font-family: 'Cactus Classical Serif', serif;
+    }
+
+    .line.show {
+      opacity: 1;
+    }
+
+    #thanks {
+      font-family: 'Pinyon Script', cursive;
+      font-size: clamp(20px, 5vw, 32px);
+      margin-top: 3vh;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    #nameLine {
+      display: inline;
+      white-space: nowrap;
+    }
+
+    #nameInput {
+      font-size: inherit;
+      border: none;
+      background-color: transparent;
+      color: rgb(255, 179, 227);
+      font-family: 'Fleur De Leah', cursive;
+      width: auto;
+      text-align: left;
+      outline: none;
+      display: inline;
+      min-width: 4ch;
+    }
+
+    @media (min-width: 768px) {
+      #title {
+        font-size: clamp(36px, 6vw, 72px);
+      }
+
+      #lines {
+        font-size: clamp(18px, 3vw, 28px);
+      }
+    }
+  </style>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Cactus+Classical+Serif&family=Fleur+De+Leah&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Oooh+Baby&family=Pinyon+Script&family=Syne:wght@800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="overlay">
+    <div id="lines">
+      <div class="line" id="line1">rõ ràng một giấc mơ hoa</div>
+      <div class="line" id="line2">bây giờ tỉnh dậy ngỡ ngàng vỡ tan</div>
+      <div id="thanks"><span id="nameLine">cám ơn <input id="nameInput" placeholder="tên bạn" /></span>
+      <div>vì đã đọc đến những dòng thơ cuối cùng này</div>
+      <div>chúc bạn mọi điều hạnh phúc trên đời!</div>
+    </div>
+  </div>
+
+  <script>
+    const line1 = document.getElementById('line1');
+    const line2 = document.getElementById('line2');
+    const thanks = document.getElementById('thanks');
+    const nameInput = document.getElementById('nameInput'); // Trường nhập tên
+
+    setTimeout(() => line1.classList.add('show'), 1000);
+    setTimeout(() => line2.classList.add('show'), 3000);
+    setTimeout(() => {
+      line1.classList.remove('show');
+      line2.classList.remove('show');
+    }, 6000);
+    setTimeout(() => {
+      thanks.style.opacity = 1;
+    }, 7500);
+
+    // Lắng nghe sự kiện input để highlight tên người dùng khi nhập
+    nameInput.addEventListener('input', () => {  // Khi người dùng nhập vào trường
+      nameInput.classList.add('highlight'); // Thêm lớp highlight khi người dùng nhập
+    });
+  </script>
+</body>
+</html>
