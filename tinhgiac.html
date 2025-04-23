@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <title>tỉnh giấc</title>
   <style>
     html, body {
@@ -19,6 +20,26 @@
       justify-content: center;
       -webkit-tap-highlight-color: transparent;
     }
+
+    #homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid white;
+  padding: 8px 16px; /* Giữ padding để nút vừa phải */
+  border-radius: 8px;
+  font-size: 16px; /* Tăng chút font-size cho chữ */
+  text-decoration: none;
+  font-family: 'Cactus Classical Serif', serif;
+  z-index: 9999; /* Đảm bảo nút nằm trên cùng */
+  transition: background 0.3s;
+}
+
+#homeBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
 
     .highlight {
       text-shadow: 0 0 6px #ffd6eb, 0 0 12px #ffd6eb;
@@ -107,6 +128,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Cactus+Classical+Serif&family=Fleur+De+Leah&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Oooh+Baby&family=Pinyon+Script&family=Syne:wght@800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <a href="./index.html" id="homeBtn"><i class="fas fa-home"></i></a>
   <div id="overlay">
     <div id="lines">
       <div class="line" id="line1">rõ ràng một giấc mơ hoa</div>
