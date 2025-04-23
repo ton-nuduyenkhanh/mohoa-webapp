@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>giangmay</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+      font-family: 'Cactus Classical Serif', serif;
+    }
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    #homeBtn, #replayBtn {
+      position: fixed;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: 'Cactus Classical Serif', serif;
+      transition: background 0.3s;
+      z-index: 10;
+      text-decoration: none;
+    }
+    #homeBtn {
+      top: 20px;
+      left: 20px;
+    }
+    #replayBtn {
+      bottom: 30px;
+      left: 90%;
+      transform: translateX(-50%);
+      cursor: pointer;
+    }
+    #homeBtn:hover, #replayBtn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Cactus+Classical+Serif&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+</head>
+<body>
+<a href="./index.html" id="homeBtn"><i class="fas fa-home"></i></a>
+<button id="replayBtn" onclick="restartSketch()">⟲</button>
+
+<script>
+  let poemLines = ["đêm trắng", "ngón tay", "ngày gieo mây về núi"];
+  let Message2 = ["củi mục", "dựng lều", "một thoáng chốc mưa bay"];
+  let Message3 = ["choáng say", "đuổi theo giấc mơ", "vụng rơi từ vết nứt"];
+  let Message4 = ["giật mình thức", "sao trời", "xa vắng hoang vu"];
+
+  let particles = [], messageObjects = [], messageObjects3 = [], messageObjects4 = [];
+  let fontSize, lineHeight;
+  let showMessage2 = false, showMessage3 = false, showMessage4 = false;
+  let showMessageTime = 0, showMessage3Time = 0, showMessage4Time = 0;
+  let loopBackToStart = false;
+  let poemLoopParticles = [];
+
+  function setup() {
+    createCanvas(windowWidth, windowHeight);
+    textFont('Cactus Classical Serif');
+    textAlign(CENTER, CENTER);
+
+    fontSize = min(windowWidth, windowHeight) * 0.025;
+    textSize(fontSize);
+    lineHeight = fontSize * 1.4;
+
+    particles = [];
+    messageObjects = [];
+    messageObjects3 = [];
+    messageObjects4 = [];
+    showMessage2 = showMessage3 = showMessage4 = false;
+    loopBackToStart = false;
+
+    createMessage(poemLines, particles);
+    createMessage(Message2, messageObjects);
+    createMessage(Message3, messageObjects3);
+    createMessage(Message4, messageObjects4);
+  }
+
+  function createMessage(lines, targetArray) {
+    let totalHeight = lines.length * lineHeight;
+    let startY = (height - totalHeight) / 2;
+
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i];
+      let y = startY + i * lineHeight;
+      let chars = line.split("");
+      let totalWidth = textWidth(line);
+      let startX = (width - totalWidth) / 2;
+      let offsetX = 0;
+
+      for (let j = 0; j < chars.length; j++) {
+        let char = chars[j];
+        let charWidth = textWidth(char);
+        targetArray.push(new Letter(char, startX + offsetX, y));
+        offsetX += charWidth;
+      }
+    }
+  }
+
+  function draw() {
+    background(0);
+
+    for (let p of poemLoopParticles) p.update(), p.display();
+    for (let p of particles) p.update(), p.display();
+
+    if (showMessage2 && millis() - showMessageTime > 3000)
+      for (let msg of messageObjects) msg.update(), msg.display();
+
+    if (showMessage3 && millis() - showMessage3Time > 3000)
+      for (let msg of messageObjects3) msg.update(), msg.display();
+
+    if (showMessage4 && millis() - showMessage4Time > 3000)
+      for (let msg of messageObjects4) msg.update(), msg.display();
+  }
+
+  function mousePressed() {
+    if (!showMessage2) {
+      for (let p of particles) {
+        if (!p.exploded && p.isClicked(mouseX, mouseY)) {
+          particles.forEach(p => p.explode());
+          showMessage2 = true;
+          showMessageTime = millis();
+          break;
+        }
+      }
+    } else if (!showMessage3) {
+      for (let msg of messageObjects) {
+        if (!msg.exploded && msg.isClicked(mouseX, mouseY)) {
+          messageObjects.forEach(m => m.explode());
+          showMessage3 = true;
+          showMessage3Time = millis();
+          break;
+        }
+      }
+    } else if (!showMessage4) {
+      for (let msg of messageObjects3) {
+        if (!msg.exploded && msg.isClicked(mouseX, mouseY)) {
+          messageObjects3.forEach(m => m.explode());
+          showMessage4 = true;
+          showMessage4Time = millis();
+          break;
+        }
+      }
+    } else if (!loopBackToStart) {
+      for (let msg of messageObjects4) {
+        if (!msg.exploded && msg.isClicked(mouseX, mouseY)) {
+          messageObjects4.forEach(m => m.explode());
+          loopBackToStart = true;
+          setTimeout(() => {
+            poemLoopParticles = [];
+            createMessage(poemLines, poemLoopParticles);
+            showMessage2 = showMessage3 = showMessage4 = false;
+            showMessageTime = showMessage3Time = showMessage4Time = 0;
+            loopBackToStart = false;
+          }, 3000);
+          break;
+        }
+      }
+    } else if (poemLoopParticles.length > 0 && !showMessage2) {
+      for (let p of poemLoopParticles) {
+        if (!p.exploded && p.isClicked(mouseX, mouseY)) {
+          poemLoopParticles.forEach(p => p.explode());
+          particles.push(...poemLoopParticles);
+          poemLoopParticles = [];
+          showMessage2 = true;
+          showMessageTime = millis();
+          break;
+        }
+      }
+    }
+  }
+
+  function restartSketch() {
+    setup();
+  }
+
+  function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+    restartSketch();
+  }
+
+  class Letter {
+    constructor(char, x, y) {
+      this.char = char;
+      this.origin = createVector(x, y);
+      this.pos = createVector(x, y);
+      this.vel = createVector(0, 0);
+      this.angle = 0;
+      this.rotationSpeed = random(-0.02, 0.02);
+      this.exploded = false;
+      this.alpha = 255;
+    }
+
+    floatGently() {
+      let t = frameCount * 0.01;
+      this.pos.x += sin(t + this.origin.y * 0.01) * 0.2;
+      this.pos.y += cos(t + this.origin.x * 0.01) * 0.1;
+    }
+
+    explode() {
+      this.vel = p5.Vector.random2D().mult(random(0.5, 2));
+      this.exploded = true;
+    }
+
+    update() {
+      if (this.exploded) {
+        this.pos.add(this.vel);
+        this.angle += this.rotationSpeed;
+      } else {
+        this.floatGently();
+      }
+    }
+
+    display() {
+      push();
+      translate(this.pos.x, this.pos.y);
+      rotate(this.angle);
+      fill(255, this.alpha);
+      noStroke();
+      text(this.char, 0, 0);
+      pop();
+    }
+
+    isClicked(mx, my) {
+      return dist(mx, my, this.pos.x, this.pos.y) < fontSize;
+    }
+  }
+</script>
+</body>
+</html>
