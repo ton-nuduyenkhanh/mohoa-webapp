@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <title>Mơ hoa</title>
   <style>
     html, body {
@@ -28,6 +29,28 @@
       text-align: center;
       z-index: 2;
       width: 90vw;
+    }
+
+    #FBBtn{
+      position: fixed;
+      background: rgba(0, 0, 0, 0.1);
+      opacity: 50%;
+      color: white;
+      border: 0px solid white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: 'Cactus Classical Serif', serif;
+      transition: background 0.3s;
+      z-index: 10;
+      text-decoration: none;
+    }
+    #FBBtn {
+      bottom: 20px;
+      right: 20px;
+    }
+    #FBBtn:hover {
+      opacity: 100%;
     }
 
   #title {
@@ -101,9 +124,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Cactus+Classical+Serif&display=swap" rel="stylesheet">
+  
 </head>
 <body>
-
+  <a href="https://www.facebook.com/ensoleillee.journee" id="FBBtn"><i class="fab fa-facebook"></i></a>
   <div id="overlay">
     <div id="title">Mơ Hoa</div>
     <div id="lines">
@@ -114,6 +138,7 @@
       <div class="line" data-link="./giangmay.html"> giăng mây 005</div>
       <div class="line" data-link="./toithang6.html">tối tháng 006</div>
       <div class="line" data-link="./tinhgiac.html">tỉnh giấc 007</div>
+    
     </div>
   </div>
 
